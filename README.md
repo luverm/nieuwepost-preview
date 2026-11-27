@@ -12,6 +12,7 @@ Afbeeldingen, stylesheet en scripts komen rechtstreeks van de dev-site; tracking
 | `bron/intro-slide-sectie.html` | Het blok onder de hero: fotopanelen schuiven van links en rechts over het rode vlak |
 | `bron/site-extras.html` | Alle scroll-effecten in één blok, voor elke pagina |
 | `lenis.min.js` | Lenis 1.3.29 (MIT) voor soepel scrollen |
+| `fonts/` | Alleen voor de preview: open vervangers voor de fonts van de site (Young Serif, Saira Condensed, Font Awesome Free), met licenties |
 | `backup/original.html` | De homepage zoals die was, als referentie |
 
 ## Op de site zetten (MODX)

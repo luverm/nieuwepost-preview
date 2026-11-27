@@ -41,6 +41,7 @@
     /* ---------- Parallax ---------- */
     .np-parallax { will-change: transform; }
     .np-parallax-frame { overflow: hidden !important; }
+    .np-parallax-wrap { display: block; position: relative; border-top-left-radius: inherit; border-top-right-radius: inherit; }
 
     /* ---------- Koppen woord voor woord ---------- */
     .np-words .np-w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .12em; margin-bottom: -.12em; }
@@ -144,6 +145,13 @@
             var sel = '.big-image-section .img-holder > img.card-img, .news-swiper .card > img.card-img, .testimonials img.testimonial-img, .home-object-types .card-img-top';
             Array.prototype.forEach.call(document.querySelectorAll(sel), function (img) {
                 if (img.closest('.intro-slide')) return;
+                if (img.classList.contains('card-img-top')) {
+                    // foto bovenin een kaart: eigen kader eromheen, anders schuift hij over de titel
+                    var wrap = document.createElement('div');
+                    wrap.className = 'np-parallax-wrap';
+                    img.parentNode.insertBefore(wrap, img);
+                    wrap.appendChild(img);
+                }
                 img.parentElement.classList.add('np-parallax-frame');
                 img.classList.add('np-parallax');
                 frameImgs.push(img);
