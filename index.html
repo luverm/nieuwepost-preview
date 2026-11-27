@@ -763,21 +763,19 @@
 
 
 <!--
-    Nieuwe Post: scroll-extra's (versie 4)
+    Nieuwe Post: scroll-extra's (versie 5)
 
     Wat zit erin:
      - Soepel scrollen (Lenis)
      - Koppen die woord voor woord omhoog komen
      - Foto's die binnen hun kader meebewegen (parallax), ook de hero
      - Header die verdwijnt bij naar beneden scrollen en terugkomt bij omhoog scrollen, met kleiner logo
-     - Footer die als bordeaux boog omhoog komt en breder wordt tot hij het scherm vult
-     - Mooiere footer: rij bogen (beeldmerk en gevel) die zich tekent, kolommen die een voor een
-       binnenkomen, meelopende onderstreping onder links, knop terug naar boven
+     - Footer statisch: zonder animaties (ook de eigen AOS-animatie van de footer staat uit)
 
     Huisstijl (Nieuwe Post, voorstel Historie): bordeaux #40000f, mauve #7a4f50, lichtoranje #fcb562,
     oker #cd841f, zand #f5e4d1. Koppen Or Lemmen, tekst Saira Light. Boogvormen als beeldelement.
      - Rustiger, zachtere inkomende blokken (bijgestelde AOS-animaties)
-     - Pijltje naar beneden in de hero en gele scrollbalk rechts
+     - Gele scrollbalk rechts
 
     Plaatsen: één keer vlak voor de afsluitende body-tag in de template.
     Lenis: upload lenis.min.js naar /assets/components/theme/templates/js/lenis.min.js
@@ -799,14 +797,6 @@
     .np-scrollbar { position: fixed; top: 0; right: 0; width: 5px; height: 100vh; z-index: 1050; background: rgba(205, 132, 31, .15); pointer-events: none; }
     .np-scrollbar__fill { width: 100%; height: 100%; background: #cd841f; transform: scaleY(0); transform-origin: top center; will-change: transform; }
 
-    /* ---------- Pijltje in de hero ---------- */
-    section.intro .np-scroll-down { position: absolute; left: 50%; bottom: 2rem; z-index: 5; width: 3.25rem; height: 3.25rem; margin-left: -1.625rem; padding: 0; display: flex; align-items: center; justify-content: center; border: 2px solid #cd841f; border-radius: 50%; background: rgba(64, 0, 15, .35); color: #cd841f; cursor: pointer; transition: background-color .3s ease, color .3s ease; animation: np-bounce 2.2s ease-in-out infinite; }
-    section.intro .np-scroll-down:hover,
-    section.intro .np-scroll-down:focus-visible { background: #cd841f; color: #fffcf4; }
-    section.intro .np-scroll-down svg { width: 1.25rem; height: 1.25rem; }
-    @keyframes np-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(.5rem); } }
-    @media (max-width: 767.98px) { section.intro .np-scroll-down { bottom: 1.25rem; width: 2.75rem; height: 2.75rem; margin-left: -1.375rem; } }
-
     /* ---------- Parallax ---------- */
     .np-parallax { will-change: transform; }
     .np-parallax-frame { overflow: hidden !important; }
@@ -823,37 +813,6 @@
     header .navbar-brand img { transition: height .4s cubic-bezier(.22, 1, .36, 1); }
     header.fixed.np-header-compact .navbar-brand img { height: 56px !important; width: auto; }
 
-    /* ---------- Footer: boog die openschuift (de overgang naar bordeaux) ---------- */
-    footer.np-footer { --np-arch-x: 0vw; --np-arch-r: 0px; clip-path: inset(0 var(--np-arch-x) 0 var(--np-arch-x) round 50% 50% 0 0 / var(--np-arch-r) var(--np-arch-r) 0 0); will-change: clip-path; position: relative; }
-
-    /* ---------- Footer: kolommen een voor een ---------- */
-    footer.np-footer .np-f-item { opacity: 0; transform: translate3d(0, 28px, 0); transition: opacity 1s cubic-bezier(.22, 1, .36, 1), transform 1.1s cubic-bezier(.22, 1, .36, 1); transition-delay: var(--np-d, 0s); }
-    footer.np-footer .np-f-item.np-in { opacity: 1; transform: none; }
-    footer.np-footer hr { transform-origin: left center; transform: scaleX(0); transition: transform 1.4s cubic-bezier(.22, 1, .36, 1); }
-    footer.np-footer hr.np-in { transform: scaleX(1); }
-
-    /* ---------- Footer: links met meelopende onderstreping ---------- */
-    footer.np-footer a:not(.fa-stack):not(.btn) { text-decoration: none; background-image: linear-gradient(currentColor, currentColor); background-size: 0% 1px; background-position: 0 100%; background-repeat: no-repeat; transition: background-size .45s cubic-bezier(.22, 1, .36, 1), color .3s ease; }
-    footer.np-footer a:not(.fa-stack):not(.btn):hover,
-    footer.np-footer a:not(.fa-stack):not(.btn):focus-visible { background-size: 100% 1px; color: #fcb562 !important; }
-    footer.np-footer .fa-stack { transition: transform .35s cubic-bezier(.22, 1, .36, 1); }
-    footer.np-footer .fa-stack:hover { transform: translateY(-4px); }
-
-    /* ---------- Footer: rij bogen (beeldmerk en gevel van het postkantoor) ---------- */
-    .np-arches { display: block; width: 100%; height: auto; margin-top: 3rem; overflow: visible; }
-    .np-arches path { fill: none; stroke-linecap: butt; }
-    .np-arches .np-arch-o { stroke: #7a4f50; stroke-width: 10; }
-    .np-arches .np-arch-i { stroke: #7a4f50; stroke-width: 3; }
-    .np-arches.np-anim path { stroke-dasharray: var(--np-len); stroke-dashoffset: var(--np-len); transition: stroke-dashoffset 1.8s cubic-bezier(.22, 1, .36, 1); transition-delay: var(--np-d, 0s); }
-    .np-arches.np-anim.np-in path { stroke-dashoffset: 0; }
-
-    /* ---------- Footer: terug naar boven ---------- */
-    .np-to-top { display: inline-flex; align-items: center; gap: .75rem; padding: 0; border: 0; background: none; color: #f5e4d1; cursor: pointer; }
-    .np-to-top span.np-to-top__circle { width: 2.75rem; height: 2.75rem; display: inline-flex; align-items: center; justify-content: center; border: 2px solid #cd841f; border-radius: 50%; color: #cd841f; transition: background-color .3s ease, color .3s ease, transform .35s cubic-bezier(.22, 1, .36, 1); }
-    .np-to-top:hover span.np-to-top__circle, .np-to-top:focus-visible span.np-to-top__circle { background: #cd841f; color: #40000f; transform: translateY(-3px); }
-    .np-to-top svg { width: 1.1rem; height: 1.1rem; }
-    .np-footer-top { display: flex; justify-content: flex-end; margin-bottom: 2.5rem; }
-
     /* ---------- Rustiger AOS-animaties ---------- */
     html body [data-aos] { transition-duration: 1.2s !important; transition-timing-function: cubic-bezier(.22, 1, .36, 1) !important; }
     html body [data-aos="zoom-in"] { transform: translate3d(0, 24px, 0) scale(.96); }
@@ -863,13 +822,9 @@
 
     /* ---------- Minder beweging ingesteld: alles rustig en direct zichtbaar ---------- */
     @media (prefers-reduced-motion: reduce) {
-        section.intro .np-scroll-down { animation: none; }
         .np-parallax { transform: none !important; }
         .np-words .np-w > span { transform: none !important; transition: none !important; }
         header.fixed { transition: none !important; }
-        footer.np-footer { clip-path: none !important; }
-        footer.np-footer .np-f-item, footer.np-footer hr { opacity: 1 !important; transform: none !important; transition: none !important; }
-        .np-arches path { stroke-dashoffset: 0 !important; transition: none !important; }
     }
 </style>
 <script>
@@ -885,10 +840,6 @@
             (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })(performance.now());
             window.npLenis = lenis;
         }
-        function scrollToY(y) {
-            if (lenis) lenis.scrollTo(y, { duration: 1.4 });
-            else window.scrollTo({ top: y, behavior: reduceMotion ? 'auto' : 'smooth' });
-        }
 
         /* ---------- Gele scrollbalk ---------- */
         var bar = document.createElement('div');
@@ -897,21 +848,6 @@
         bar.innerHTML = '<div class="np-scrollbar__fill"></div>';
         document.body.appendChild(bar);
         var fill = bar.firstChild;
-
-        /* ---------- Pijltje ---------- */
-        if (hero) {
-            var btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'np-scroll-down';
-            btn.setAttribute('aria-label', 'Scroll naar de inhoud');
-            btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
-            btn.addEventListener('click', function () {
-                var next = hero.nextElementSibling;
-                while (next && next.offsetHeight === 0) next = next.nextElementSibling;
-                scrollToY(next ? next.getBoundingClientRect().top + window.pageYOffset : hero.offsetHeight);
-            });
-            hero.appendChild(btn);
-        }
 
         /* ---------- Koppen woord voor woord ---------- */
         var headings = reduceMotion ? [] : document.querySelectorAll('h2.written-title, .big-image-section h2');
@@ -955,54 +891,11 @@
             });
         }
 
-        /* ---------- Footer ---------- */
+        /* ---------- Footer: statisch, eigen AOS-animatie uit ---------- */
         var footer = document.querySelector('footer');
-        var revealIO = ('IntersectionObserver' in window) ? new IntersectionObserver(function (entries) {
-            entries.forEach(function (e) {
-                if (e.isIntersecting) { e.target.classList.add('np-in'); revealIO.unobserve(e.target); }
-            });
-        }, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' }) : null;
-        if (footer) {
-            footer.classList.add('np-footer');
-            var fc = footer.querySelector('.container') || footer;
-
-            // knop terug naar boven, rechtsboven in de footer
-            var topRow = document.createElement('div');
-            topRow.className = 'np-footer-top';
-            topRow.innerHTML = '<button type="button" class="np-to-top">Terug naar boven <span class="np-to-top__circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg></span></button>';
-            fc.insertBefore(topRow, fc.firstChild);
-            topRow.firstChild.addEventListener('click', function () { scrollToY(0); });
-
-            // kolommen een voor een (de eigen AOS-animatie van de rij uitzetten)
-            Array.prototype.forEach.call(fc.querySelectorAll('.row'), function (row) {
-                if (row.hasAttribute('data-aos')) { row.removeAttribute('data-aos'); row.classList.remove('aos-init', 'aos-animate'); }
-                Array.prototype.forEach.call(row.children, function (col, i) {
-                    if (reduceMotion || !revealIO) return;
-                    col.classList.add('np-f-item');
-                    col.style.setProperty('--np-d', (i % 4 * 0.09).toFixed(2) + 's');
-                    revealIO.observe(col);
-                });
-            });
-            if (!reduceMotion && revealIO) Array.prototype.forEach.call(fc.querySelectorAll('hr'), function (hr) { revealIO.observe(hr); });
-
-            // rij bogen onderaan, opgebouwd zoals de bogen in het beeldmerk en de gevel
-            var n = 6, gap = 28, aw = (1200 - gap * (n - 1)) / n, top = 30, base = 240, svg = '';
-            for (var a = 0; a < n; a++) {
-                var x = a * (aw + gap), r = aw / 2, ri = r - 18;
-                svg += '<path class="np-arch-o" style="--np-d:' + (a * 0.12).toFixed(2) + 's" d="M' + x + ' ' + base + ' V' + (top + r) + ' A' + r + ' ' + r + ' 0 0 1 ' + (x + aw) + ' ' + (top + r) + ' V' + base + '"/>';
-                svg += '<path class="np-arch-i" style="--np-d:' + (a * 0.12 + 0.25).toFixed(2) + 's" d="M' + (x + 18) + ' ' + base + ' V' + (top + r) + ' A' + ri + ' ' + ri + ' 0 0 1 ' + (x + aw - 18) + ' ' + (top + r) + ' V' + base + '"/>';
-            }
-            var arches = document.createElement('div');
-            arches.setAttribute('aria-hidden', 'true');
-            arches.innerHTML = '<svg class="np-arches" viewBox="0 0 1200 ' + base + '" preserveAspectRatio="xMidYMax meet">' + svg + '</svg>';
-            arches = arches.firstChild;
-            fc.appendChild(arches);
-            if (!reduceMotion && revealIO) {
-                Array.prototype.forEach.call(arches.querySelectorAll('path'), function (p) { p.style.setProperty('--np-len', Math.ceil(p.getTotalLength())); });
-                arches.classList.add('np-anim');
-                revealIO.observe(arches);
-            }
-        }
+        if (footer) Array.prototype.forEach.call(footer.querySelectorAll('[data-aos]'), function (el) {
+            el.removeAttribute('data-aos'); el.classList.remove('aos-init', 'aos-animate');
+        });
 
         /* ---------- Header ---------- */
         var lastY = window.pageYOffset;
@@ -1036,15 +929,6 @@
                 else if (y < lastY - 4 || y <= 300 || menuOpen) header.classList.remove('np-header-hidden');
             }
             lastY = y;
-
-            // boog: smal en rond als de footer onderin beeld komt, volle breedte en recht als hij hoger staat
-            if (footer && !reduceMotion) {
-                var ft = footer.getBoundingClientRect().top;
-                var t = Math.min(Math.max((vh - ft) / (vh * 0.9), 0), 1);
-                t = t * t * (3 - 2 * t); // zacht beginnen en zacht eindigen
-                footer.style.setProperty('--np-arch-x', ((1 - t) * 10).toFixed(2) + 'vw');
-                footer.style.setProperty('--np-arch-r', ((1 - t) * Math.min(window.innerWidth * 0.32, 420)).toFixed(1) + 'px');
-            }
         }
         function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
         window.addEventListener('scroll', onScroll, { passive: true });
