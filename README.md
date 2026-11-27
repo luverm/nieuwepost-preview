@@ -33,3 +33,14 @@ Afbeeldingen, stylesheet en scripts komen rechtstreeks van de dev-site; tracking
 - Pijltje naar beneden in de hero en gele scrollbalk rechts
 
 Bij "minder beweging" in de systeeminstellingen van de bezoeker staan de bewegende effecten uit.
+
+## Huisstijl
+
+Alle toevoegingen volgen de huisstijl van Nieuwe Post (voorstel "Historie" uit het huisstijlboek van LMG):
+
+- Kleuren: bordeaux `#40000f`, mauve `#7a4f50`, lichtoranje `#fcb562`, oker `#cd841f`, zand `#f5e4d1`
+- Letters: Or Lemmen voor koppen, Saira Light voor tekst
+- Beeldelement: boogvormen, zoals in het beeldmerk en de gevel van het oude postkantoor
+
+In de preview staan Or Lemmen en Font Awesome Pro niet in de repo (betaalde licenties); daar worden
+open vervangers gebruikt. Op de echte site laden de echte fonts.

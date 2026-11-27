@@ -763,7 +763,7 @@
 
 
 <!--
-    Nieuwe Post: scroll-extra's (versie 3)
+    Nieuwe Post: scroll-extra's (versie 4)
 
     Wat zit erin:
      - Soepel scrollen (Lenis)
@@ -771,8 +771,11 @@
      - Foto's die binnen hun kader meebewegen (parallax), ook de hero
      - Header die verdwijnt bij naar beneden scrollen en terugkomt bij omhoog scrollen, met kleiner logo
      - Footer die als bordeaux boog omhoog komt en breder wordt tot hij het scherm vult
-     - Mooiere footer: groot woordmerk dat letter voor letter opkomt, kolommen die een voor een
+     - Mooiere footer: rij bogen (beeldmerk en gevel) die zich tekent, kolommen die een voor een
        binnenkomen, meelopende onderstreping onder links, knop terug naar boven
+
+    Huisstijl (Nieuwe Post, voorstel Historie): bordeaux #40000f, mauve #7a4f50, lichtoranje #fcb562,
+    oker #cd841f, zand #f5e4d1. Koppen Or Lemmen, tekst Saira Light. Boogvormen als beeldelement.
      - Rustiger, zachtere inkomende blokken (bijgestelde AOS-animaties)
      - Pijltje naar beneden in de hero en gele scrollbalk rechts
 
@@ -832,20 +835,22 @@
     /* ---------- Footer: links met meelopende onderstreping ---------- */
     footer.np-footer a:not(.fa-stack):not(.btn) { text-decoration: none; background-image: linear-gradient(currentColor, currentColor); background-size: 0% 1px; background-position: 0 100%; background-repeat: no-repeat; transition: background-size .45s cubic-bezier(.22, 1, .36, 1), color .3s ease; }
     footer.np-footer a:not(.fa-stack):not(.btn):hover,
-    footer.np-footer a:not(.fa-stack):not(.btn):focus-visible { background-size: 100% 1px; color: #f6c26b !important; }
+    footer.np-footer a:not(.fa-stack):not(.btn):focus-visible { background-size: 100% 1px; color: #fcb562 !important; }
     footer.np-footer .fa-stack { transition: transform .35s cubic-bezier(.22, 1, .36, 1); }
     footer.np-footer .fa-stack:hover { transform: translateY(-4px); }
 
-    /* ---------- Footer: groot woordmerk ---------- */
-    .np-wordmark { display: block; margin: 3rem 0 0; padding: 0; font-family: OrLemmen, serif; font-weight: 700; line-height: .8; letter-spacing: -.01em; color: #cd841f; white-space: nowrap; overflow: hidden; text-align: center; user-select: none; padding-bottom: .06em; }
-    .np-wordmark__in { display: inline-block; }
-    .np-wordmark .np-l { display: inline-block; transform: translateY(105%); transition: transform 1.2s cubic-bezier(.22, 1, .36, 1); transition-delay: var(--np-d, 0s); }
-    .np-wordmark.np-in .np-l { transform: none; }
+    /* ---------- Footer: rij bogen (beeldmerk en gevel van het postkantoor) ---------- */
+    .np-arches { display: block; width: 100%; height: auto; margin-top: 3rem; overflow: visible; }
+    .np-arches path { fill: none; stroke-linecap: butt; }
+    .np-arches .np-arch-o { stroke: #7a4f50; stroke-width: 10; }
+    .np-arches .np-arch-i { stroke: #7a4f50; stroke-width: 3; }
+    .np-arches.np-anim path { stroke-dasharray: var(--np-len); stroke-dashoffset: var(--np-len); transition: stroke-dashoffset 1.8s cubic-bezier(.22, 1, .36, 1); transition-delay: var(--np-d, 0s); }
+    .np-arches.np-anim.np-in path { stroke-dashoffset: 0; }
 
     /* ---------- Footer: terug naar boven ---------- */
-    .np-to-top { display: inline-flex; align-items: center; gap: .75rem; padding: 0; border: 0; background: none; color: #fffcf4; cursor: pointer; }
+    .np-to-top { display: inline-flex; align-items: center; gap: .75rem; padding: 0; border: 0; background: none; color: #f5e4d1; cursor: pointer; }
     .np-to-top span.np-to-top__circle { width: 2.75rem; height: 2.75rem; display: inline-flex; align-items: center; justify-content: center; border: 2px solid #cd841f; border-radius: 50%; color: #cd841f; transition: background-color .3s ease, color .3s ease, transform .35s cubic-bezier(.22, 1, .36, 1); }
-    .np-to-top:hover span.np-to-top__circle, .np-to-top:focus-visible span.np-to-top__circle { background: #cd841f; color: #fffcf4; transform: translateY(-3px); }
+    .np-to-top:hover span.np-to-top__circle, .np-to-top:focus-visible span.np-to-top__circle { background: #cd841f; color: #40000f; transform: translateY(-3px); }
     .np-to-top svg { width: 1.1rem; height: 1.1rem; }
     .np-footer-top { display: flex; justify-content: flex-end; margin-bottom: 2.5rem; }
 
@@ -863,7 +868,8 @@
         .np-words .np-w > span { transform: none !important; transition: none !important; }
         header.fixed { transition: none !important; }
         footer.np-footer { clip-path: none !important; }
-        footer.np-footer .np-f-item, footer.np-footer hr, .np-wordmark .np-l { opacity: 1 !important; transform: none !important; transition: none !important; }
+        footer.np-footer .np-f-item, footer.np-footer hr { opacity: 1 !important; transform: none !important; transition: none !important; }
+        .np-arches path { stroke-dashoffset: 0 !important; transition: none !important; }
     }
 </style>
 <script>
@@ -956,7 +962,6 @@
                 if (e.isIntersecting) { e.target.classList.add('np-in'); revealIO.unobserve(e.target); }
             });
         }, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' }) : null;
-        var wordmark = null;
         if (footer) {
             footer.classList.add('np-footer');
             var fc = footer.querySelector('.container') || footer;
@@ -980,26 +985,24 @@
             });
             if (!reduceMotion && revealIO) Array.prototype.forEach.call(fc.querySelectorAll('hr'), function (hr) { revealIO.observe(hr); });
 
-            // groot woordmerk onderaan
-            wordmark = document.createElement('div');
-            wordmark.className = 'np-wordmark';
-            wordmark.setAttribute('aria-hidden', 'true');
-            wordmark.innerHTML = '<span class="np-wordmark__in">' + 'Nieuwe Post'.split('').map(function (ch, i) {
-                return ch === ' ' ? '<span class="np-l">&nbsp;</span>' : '<span class="np-l" style="--np-d:' + (i * 0.05).toFixed(2) + 's">' + ch + '</span>';
-            }).join('') + '</span>';
-            fc.appendChild(wordmark);
-            if (reduceMotion || !revealIO) wordmark.classList.add('np-in'); else revealIO.observe(wordmark);
+            // rij bogen onderaan, opgebouwd zoals de bogen in het beeldmerk en de gevel
+            var n = 6, gap = 28, aw = (1200 - gap * (n - 1)) / n, top = 30, base = 240, svg = '';
+            for (var a = 0; a < n; a++) {
+                var x = a * (aw + gap), r = aw / 2, ri = r - 18;
+                svg += '<path class="np-arch-o" style="--np-d:' + (a * 0.12).toFixed(2) + 's" d="M' + x + ' ' + base + ' V' + (top + r) + ' A' + r + ' ' + r + ' 0 0 1 ' + (x + aw) + ' ' + (top + r) + ' V' + base + '"/>';
+                svg += '<path class="np-arch-i" style="--np-d:' + (a * 0.12 + 0.25).toFixed(2) + 's" d="M' + (x + 18) + ' ' + base + ' V' + (top + r) + ' A' + ri + ' ' + ri + ' 0 0 1 ' + (x + aw - 18) + ' ' + (top + r) + ' V' + base + '"/>';
+            }
+            var arches = document.createElement('div');
+            arches.setAttribute('aria-hidden', 'true');
+            arches.innerHTML = '<svg class="np-arches" viewBox="0 0 1200 ' + base + '" preserveAspectRatio="xMidYMax meet">' + svg + '</svg>';
+            arches = arches.firstChild;
+            fc.appendChild(arches);
+            if (!reduceMotion && revealIO) {
+                Array.prototype.forEach.call(arches.querySelectorAll('path'), function (p) { p.style.setProperty('--np-len', Math.ceil(p.getTotalLength())); });
+                arches.classList.add('np-anim');
+                revealIO.observe(arches);
+            }
         }
-        // woordmerk precies zo breed als de container maken
-        function fitWordmark() {
-            if (!wordmark) return;
-            wordmark.style.fontSize = '100px';
-            var w = wordmark.firstChild.getBoundingClientRect().width, target = wordmark.clientWidth;
-            if (w > 0) wordmark.style.fontSize = Math.floor(100 * target / w * 0.98) + 'px';
-        }
-        fitWordmark();
-        if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitWordmark);
-        window.addEventListener('resize', fitWordmark);
 
         /* ---------- Header ---------- */
         var lastY = window.pageYOffset;
