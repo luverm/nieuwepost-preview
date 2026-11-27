@@ -23,6 +23,9 @@
     .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
     .lenis.lenis-stopped { overflow: hidden; }
 
+    /* ---------- Hero: nooit intern laten verschuiven (voorkomt een lege strook onder de foto) ---------- */
+    section.intro { overflow: hidden; overflow: clip; }
+
     /* ---------- Gele scrollbalk ---------- */
     .np-scrollbar { position: fixed; top: 0; right: 0; width: 5px; height: 100vh; z-index: 1050; background: rgba(205, 132, 31, .15); pointer-events: none; }
     .np-scrollbar__fill { width: 100%; height: 100%; background: #cd841f; transform: scaleY(0); transform-origin: top center; will-change: transform; }
