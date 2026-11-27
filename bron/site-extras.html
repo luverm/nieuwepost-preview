@@ -1,0 +1,197 @@
+<!--
+    Nieuwe Post: scroll-extra's (versie 2)
+
+    Wat zit erin:
+     - Soepel scrollen (Lenis)
+     - Koppen die woord voor woord omhoog komen
+     - Foto's die binnen hun kader meebewegen (parallax), ook de hero
+     - Header die verdwijnt bij naar beneden scrollen en terugkomt bij omhoog scrollen, met kleiner logo
+     - Achtergrond die richting de footer geleidelijk naar bordeaux verloopt
+     - Rustiger, zachtere inkomende blokken (bijgestelde AOS-animaties)
+     - Pijltje naar beneden in de hero en gele scrollbalk rechts
+
+    Plaatsen: één keer vlak voor de afsluitende body-tag in de template.
+    Lenis: upload lenis.min.js naar /assets/components/theme/templates/js/lenis.min.js
+    (of gebruik de CDN-regel hieronder).
+-->
+<script src="/assets/components/theme/templates/js/lenis.min.js"></script>
+<!-- Alternatief zonder uploaden: <script src="https://unpkg.com/lenis@1.3.29/dist/lenis.min.js"></script> -->
+<style>
+    /* ---------- Lenis (soepel scrollen) ---------- */
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+    .lenis.lenis-stopped { overflow: hidden; }
+
+    /* ---------- Gele scrollbalk ---------- */
+    .np-scrollbar { position: fixed; top: 0; right: 0; width: 5px; height: 100vh; z-index: 1050; background: rgba(205, 132, 31, .15); pointer-events: none; }
+    .np-scrollbar__fill { width: 100%; height: 100%; background: #cd841f; transform: scaleY(0); transform-origin: top center; will-change: transform; }
+
+    /* ---------- Pijltje in de hero ---------- */
+    section.intro .np-scroll-down { position: absolute; left: 50%; bottom: 2rem; z-index: 5; width: 3.25rem; height: 3.25rem; margin-left: -1.625rem; padding: 0; display: flex; align-items: center; justify-content: center; border: 2px solid #cd841f; border-radius: 50%; background: rgba(64, 0, 15, .35); color: #cd841f; cursor: pointer; transition: background-color .3s ease, color .3s ease; animation: np-bounce 2.2s ease-in-out infinite; }
+    section.intro .np-scroll-down:hover,
+    section.intro .np-scroll-down:focus-visible { background: #cd841f; color: #fffcf4; }
+    section.intro .np-scroll-down svg { width: 1.25rem; height: 1.25rem; }
+    @keyframes np-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(.5rem); } }
+    @media (max-width: 767.98px) { section.intro .np-scroll-down { bottom: 1.25rem; width: 2.75rem; height: 2.75rem; margin-left: -1.375rem; } }
+
+    /* ---------- Parallax ---------- */
+    .np-parallax { will-change: transform; }
+    .np-parallax-frame { overflow: hidden !important; }
+
+    /* ---------- Koppen woord voor woord ---------- */
+    .np-words .np-w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .12em; margin-bottom: -.12em; }
+    .np-words .np-w > span { display: inline-block; transform: translateY(105%); transition: transform 1.1s cubic-bezier(.22, 1, .36, 1); transition-delay: var(--np-d, 0s); }
+    .np-words.np-in .np-w > span { transform: none; }
+
+    /* ---------- Header ---------- */
+    header.fixed { transition: transform .5s cubic-bezier(.22, 1, .36, 1), background-color .3s ease, box-shadow .3s ease !important; }
+    header.fixed.np-header-hidden { transform: translateY(-100%); box-shadow: none !important; }
+    header .navbar-brand img { transition: height .4s cubic-bezier(.22, 1, .36, 1); }
+    header.fixed.np-header-compact .navbar-brand img { height: 56px !important; width: auto; }
+
+    /* ---------- Kleurverloop naar bordeaux richting footer ---------- */
+    body { transition: background-color .9s cubic-bezier(.22, 1, .36, 1); }
+    body.np-dark { background-color: #40000f !important; }
+    .np-dark-zone, .np-dark-zone p, .np-dark-zone h2, .np-dark-zone h3 { transition: color .9s cubic-bezier(.22, 1, .36, 1); }
+    body.np-dark .np-dark-zone, body.np-dark .np-dark-zone p:not([class*="text-"]), body.np-dark .np-dark-zone h2:not([class*="text-"]), body.np-dark .np-dark-zone h3:not([class*="text-"]) { color: #fffcf4; }
+
+    /* ---------- Rustiger AOS-animaties ---------- */
+    html body [data-aos] { transition-duration: 1.2s !important; transition-timing-function: cubic-bezier(.22, 1, .36, 1) !important; }
+    html body [data-aos="zoom-in"] { transform: translate3d(0, 24px, 0) scale(.96); }
+    html body [data-aos="fade-up"], html body [data-aos="subtle-fade-up"] { transform: translate3d(0, 32px, 0); }
+    html body [data-aos="fade-right"] { transform: translate3d(-32px, 0, 0); }
+    html body [data-aos].aos-animate { transform: translateZ(0) !important; }
+
+    /* ---------- Minder beweging ingesteld: alles rustig en direct zichtbaar ---------- */
+    @media (prefers-reduced-motion: reduce) {
+        section.intro .np-scroll-down { animation: none; }
+        .np-parallax { transform: none !important; }
+        .np-words .np-w > span { transform: none !important; transition: none !important; }
+        body, header.fixed { transition: none !important; }
+    }
+</style>
+<script>
+    (function () {
+        var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var hero = document.querySelector('section.intro');
+        var header = document.querySelector('header');
+
+        /* ---------- Lenis ---------- */
+        var lenis = null;
+        if (!reduceMotion && window.Lenis) {
+            lenis = new Lenis({ lerp: 0.085, smoothWheel: true, anchors: true });
+            (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })(performance.now());
+            window.npLenis = lenis;
+        }
+        function scrollToY(y) {
+            if (lenis) lenis.scrollTo(y, { duration: 1.4 });
+            else window.scrollTo({ top: y, behavior: reduceMotion ? 'auto' : 'smooth' });
+        }
+
+        /* ---------- Gele scrollbalk ---------- */
+        var bar = document.createElement('div');
+        bar.className = 'np-scrollbar';
+        bar.setAttribute('aria-hidden', 'true');
+        bar.innerHTML = '<div class="np-scrollbar__fill"></div>';
+        document.body.appendChild(bar);
+        var fill = bar.firstChild;
+
+        /* ---------- Pijltje ---------- */
+        if (hero) {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'np-scroll-down';
+            btn.setAttribute('aria-label', 'Scroll naar de inhoud');
+            btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+            btn.addEventListener('click', function () {
+                var next = hero.nextElementSibling;
+                while (next && next.offsetHeight === 0) next = next.nextElementSibling;
+                scrollToY(next ? next.getBoundingClientRect().top + window.pageYOffset : hero.offsetHeight);
+            });
+            hero.appendChild(btn);
+        }
+
+        /* ---------- Koppen woord voor woord ---------- */
+        var headings = reduceMotion ? [] : document.querySelectorAll('h2.written-title, .big-image-section h2');
+        var wordIO = ('IntersectionObserver' in window) ? new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (e.isIntersecting) { e.target.classList.add('np-in'); wordIO.unobserve(e.target); }
+            });
+        }, { threshold: 0.4 }) : null;
+        Array.prototype.forEach.call(headings, function (h) {
+            if (!wordIO || h.children.length) return; // alleen koppen met platte tekst
+            var words = h.textContent.trim().split(/\s+/);
+            h.setAttribute('aria-label', h.textContent.trim());
+            h.innerHTML = words.map(function (w, i) {
+                return '<span class="np-w" aria-hidden="true"><span style="--np-d:' + (i * 0.06).toFixed(2) + 's">' + w + '</span></span>';
+            }).join(' ');
+            h.classList.add('np-words');
+            // de eigen AOS-animatie van de kop uitzetten, anders dubbelt het effect
+            if (h.hasAttribute('data-aos')) { h.removeAttribute('data-aos'); h.classList.remove('aos-init', 'aos-animate'); h.style.opacity = ''; h.style.transform = ''; }
+            wordIO.observe(h);
+        });
+
+        /* ---------- Parallax ---------- */
+        var heroImgs = (hero && !reduceMotion) ? hero.querySelectorAll('img') : [];
+        Array.prototype.forEach.call(heroImgs, function (img) { img.classList.add('np-parallax'); });
+
+        var frameImgs = [];
+        if (!reduceMotion) {
+            var sel = '.big-image-section .img-holder > img.card-img, .news-swiper .card > img.card-img, .testimonials img.testimonial-img, .home-object-types .card-img-top';
+            Array.prototype.forEach.call(document.querySelectorAll(sel), function (img) {
+                if (img.closest('.intro-slide')) return;
+                img.parentElement.classList.add('np-parallax-frame');
+                img.classList.add('np-parallax');
+                frameImgs.push(img);
+            });
+        }
+
+        /* ---------- Kleurverloop: de sectie vlak boven de footer ---------- */
+        var footer = document.querySelector('footer');
+        var darkZone = document.querySelector('[data-np-dark]') || (footer && footer.previousElementSibling && footer.previousElementSibling.tagName === 'SECTION' ? footer.previousElementSibling : null);
+        if (darkZone) darkZone.classList.add('np-dark-zone');
+
+        /* ---------- Header ---------- */
+        var lastY = window.pageYOffset;
+        var menu = document.getElementById('navbarNavDropdown');
+
+        /* ---------- Eén scroll-loop voor alles ---------- */
+        var ticking = false;
+        function update() {
+            ticking = false;
+            var y = window.pageYOffset;
+            var vh = window.innerHeight;
+            var max = document.documentElement.scrollHeight - vh;
+
+            fill.style.transform = 'scaleY(' + (max > 0 ? Math.min(y / max, 1) : 0) + ')';
+
+            if (heroImgs.length && y <= hero.offsetHeight) {
+                for (var i = 0; i < heroImgs.length; i++) heroImgs[i].style.transform = 'translate3d(0,' + (y * 0.4) + 'px,0)';
+            }
+
+            for (var j = 0; j < frameImgs.length; j++) {
+                var r = frameImgs[j].parentElement.getBoundingClientRect();
+                if (r.bottom < -100 || r.top > vh + 100) continue;
+                var p = ((r.top + r.height / 2) - vh / 2) / (vh / 2 + r.height / 2); // -1 .. 1
+                frameImgs[j].style.transform = 'translate3d(0,' + (p * -6).toFixed(2) + '%,0) scale(1.14)';
+            }
+
+            if (header) {
+                var menuOpen = menu && menu.classList.contains('show');
+                header.classList.toggle('np-header-compact', y > 120);
+                if (!menuOpen && y > 300 && y > lastY + 4) header.classList.add('np-header-hidden');
+                else if (y < lastY - 4 || y <= 300 || menuOpen) header.classList.remove('np-header-hidden');
+            }
+            lastY = y;
+
+            if (darkZone) {
+                document.body.classList.toggle('np-dark', darkZone.getBoundingClientRect().top < vh * 0.55);
+            }
+        }
+        function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+        update();
+    })();
+</script>
