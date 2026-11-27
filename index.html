@@ -1037,8 +1037,8 @@
             // boog: smal en rond als de footer onderin beeld komt, volle breedte en recht als hij hoger staat
             if (footer && !reduceMotion) {
                 var ft = footer.getBoundingClientRect().top;
-                var t = Math.min(Math.max((vh - ft) / (vh * 0.75), 0), 1);
-                t = 1 - Math.pow(1 - t, 3); // zacht uitlopen
+                var t = Math.min(Math.max((vh - ft) / (vh * 0.9), 0), 1);
+                t = t * t * (3 - 2 * t); // zacht beginnen en zacht eindigen
                 footer.style.setProperty('--np-arch-x', ((1 - t) * 10).toFixed(2) + 'vw');
                 footer.style.setProperty('--np-arch-r', ((1 - t) * Math.min(window.innerWidth * 0.32, 420)).toFixed(1) + 'px');
             }
