@@ -14,6 +14,7 @@ Afbeeldingen, stylesheet en scripts komen rechtstreeks van de dev-site; tracking
 | `lenis.min.js` | Lenis 1.3.29 (MIT) voor soepel scrollen |
 | `fonts/` | Alleen voor de preview: open vervangers voor de fonts van de site (Young Serif, Saira Condensed, Font Awesome Free), met licenties |
 | `backup/original.html` | De homepage zoals die was, als referentie |
+| `tools/build_preview.py` | Bouwt `index.html` opnieuw uit de bestanden hierboven |
 
 ## Op de site zetten (MODX)
 

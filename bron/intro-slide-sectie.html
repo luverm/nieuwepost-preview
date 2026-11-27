@@ -2,7 +2,14 @@
     <style>
         /* Hoogte gelijk aan het originele rode vlak (gemeten: 460px vanaf 1200px, 484px rond 1024px, ca. 380px op tablet en 418px op mobiel) */
         .intro-slide { --split: 50%; --inset: 0; display: flex; min-height: 460px; padding-block: var(--inset) !important; }
-        .intro-slide > .container { display: flex; }
+        /* Panelen lopen van rand tot rand: het rood is alleen te zien tijdens het inschuiven */
+        .intro-slide > .intro-slide__bleed { display: flex; width: 100%; }
+        /* --cw = breedte van de Bootstrap-container, zodat de tekst uitlijnt met de rest van de pagina */
+        .intro-slide { --cw: 100vw; }
+        @media (min-width: 768px) { .intro-slide { --cw: 720px; } }
+        @media (min-width: 992px) { .intro-slide { --cw: 960px; } }
+        @media (min-width: 1200px) { .intro-slide { --cw: 1140px; } }
+        @media (min-width: 1400px) { .intro-slide { --cw: 1320px; } }
         .intro-slide .intro-slide__stage { position: relative; display: flex; flex: 1 1 auto; }
         .intro-slide .intro-slide__panel { position: relative; overflow: hidden; }
         .intro-slide .intro-slide__panel--left { flex: 0 0 var(--split); }
@@ -12,7 +19,7 @@
         .intro-slide .intro-slide__panel--left img { left: 0; width: calc(100% * 100 / var(--split-n, 50)); filter: blur(10px); transform: scale(1.08); transform-origin: left center; }
         .intro-slide .intro-slide__panel--right img { right: 0; width: calc(100% * 100 / (100 - var(--split-n, 50))); }
         .intro-slide .intro-slide__shade { position: absolute; inset: 0; background-color: rgba(0, 0, 0, .2); }
-        .intro-slide .intro-slide__content { position: relative; z-index: 1; height: 100%; display: flex; align-items: center; padding: 3rem 3.5rem; }
+        .intro-slide .intro-slide__content { position: relative; z-index: 1; height: 100%; display: flex; align-items: center; padding: 3rem 3.5rem 3rem max(2.5rem, calc((100vw - var(--cw)) / 2 + .75rem)); }
         .intro-slide .intro-slide__content h1 { margin-bottom: .75rem; }
         .intro-slide .intro-slide__content p { margin-bottom: 0; }
         .intro-slide .intro-slide__content .hooks::after { right: 0; }
@@ -21,7 +28,7 @@
         }
         @media (min-width: 768px) and (max-width: 991.98px) {
             .intro-slide { --split: 65%; --split-n: 65; min-height: 380px; }
-            .intro-slide .intro-slide__content { padding: 2rem 2rem; }
+            .intro-slide .intro-slide__content { padding: 2rem 2rem 2rem max(2rem, calc((100vw - var(--cw)) / 2 + .75rem)); }
         }
         @media (max-width: 767.98px) {
             .intro-slide { --split: 100%; --split-n: 100; min-height: 418px; }
@@ -59,7 +66,7 @@
             .intro-slide.is-ready .intro-slide__content .hooks::after { transform: none !important; opacity: 1 !important; transition: none !important; }
         }
     </style>
-    <div class="container position-relative">
+    <div class="intro-slide__bleed position-relative">
         <div class="intro-slide__stage">
             <div class="intro-slide__panel intro-slide__panel--left">
                 <img src="/assets/components/gallery/connector.php?action=web/phpthumb&amp;ctx=web&amp;w=0&amp;h=0&amp;zc=0&amp;far=&amp;q=90&amp;src=%2Fassets%2Fgallery%2F7%2F416.jpg" alt="" loading="lazy" decoding="async">
